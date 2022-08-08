@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 
 import "../pages/login.css";
 import RegistrationForm from "./RegistrationForm";
+import axios from "axios";
 
 const Login = () => {
   let navigate = useNavigate();
@@ -16,36 +17,37 @@ const Login = () => {
 
   const [login, setLogin] = useState({
     email: "",
-    password: "",
-    conformpassword: "",
-    role : ""
+    password: ""
   });
   const handleChangeLogin = (e) => {
     const { name, value } = e.target;
     setLogin({ ...login, [name]: value });
   };
-  let registerData = localStorage.getItem("registerData")
-  let jsonres = JSON.parse(registerData)
-  
-  const submitLoign = (event) => {
-    console.log("--->", jsonres);
-    if(jsonres){
-      if(jsonres.email == login.email && jsonres.password == login.password){
-        if(jsonres.role == 'CREATOR'){
-          login.role = jsonres.role
-          const json = JSON.stringify(login);
-          localStorage.setItem("data", json);
-        }else if(jsonres.role == 'VIEWER'){
-          login.role = jsonres.role
-          const json = JSON.stringify(login);
-          localStorage.setItem("data", json);
-        }
-      }else{
-        alert('error')
-      }
-    }else{
-      alert('sign up to continue')
-    }
+  const submitLoign = () => {
+    console.log(login);
+    localStorage.setItem("data", JSON.stringify(login));
+    axios.post(`http://localhost:8000/api/v1/auth/login`, JSON.stringify(login)).then(res => {
+      console.log(res);
+    }).catch(e => {
+      console.log(e);
+    })
+    // if(jsonres){
+    //   if(jsonres.email == login.email && jsonres.password == login.password){
+    //     if(jsonres.role == 'CREATOR'){
+    //       login.role = jsonres.role
+    //       const json = JSON.stringify(login);
+    //       localStorage.setItem("data", json);
+    //     }else if(jsonres.role == 'VIEWER'){
+    //       login.role = jsonres.role
+    //       const json = JSON.stringify(login);
+    //       localStorage.setItem("data", json);
+    //     }
+    //   }else{
+    //     alert('error')
+    //   }
+    // }else{
+    //   alert('sign up to continue')
+    // }
   };
   return (
     <>
@@ -119,7 +121,7 @@ const Login = () => {
                         <button className="btn btn-outline-success" >
                           Login
                         </button>
-                        <br/>
+                        <br />
                         <NavLink to="/Registration" className="btn btn-outline-danger"> Sign up and Registration</NavLink>
                       </div>
                     </div>

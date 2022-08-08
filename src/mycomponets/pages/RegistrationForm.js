@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { NavLink, useNavigate } from "react-router-dom";
 import Login from "./Login";
-
+import axios from 'axios'
 const RegistrationForm = () => {
 
   let navigate = useNavigate()
@@ -29,6 +29,12 @@ const RegistrationForm = () => {
     }
     // alert("email - " + registervalue.email + "\n username - " + registervalue.username + "\n password - " + registervalue.password + "\n role - " + registervalue.role)
     const json = JSON.stringify(registervalue);
+    axios.post(`http://localhost:8000/api/v1/auth/register`, registervalue).then(function (response) {
+      console.log(response);
+    }).catch(function (error) {
+      console.log(error);
+    });
+
     localStorage.setItem("registerData", json);
     navigate('/')
   }
