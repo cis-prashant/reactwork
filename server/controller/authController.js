@@ -1,10 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
-const mongoose = require('mongoose');
-const db = require('../connection');
-const usersSchema = new mongoose.Schema({ username: String, email : String, role : String, password : String });
-const Users = db.model('users', usersSchema);
+const Users = require('../models/users');
 require('dotenv').config();
 
 exports.register = async function(req, res){
@@ -52,7 +49,7 @@ exports.login = async function(req, res){
         return res.status(200).json({success: 'fail', errors: "The password that you have entered is incorrect!", incorrectPwd : true });
     }
 
-    let payload = { id: user._id, email: user.email};
+    let payload = { id: user._id, email: user.email, role : user.role};
     let options = { expiresIn: process.env.JWT_EXPIRES, algorithm: 'HS256', issuer: process.env.JWT_ISSUER };
     let secret = process.env.JWT_SECRET;
     
