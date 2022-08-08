@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { NavLink, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import axios from 'axios'
+import { toast } from "react-toastify";
 const RegistrationForm = () => {
 
   let navigate = useNavigate()
@@ -27,15 +28,13 @@ const RegistrationForm = () => {
       alert("Complete all the fields!!!")
       return
     }
-    // alert("email - " + registervalue.email + "\n username - " + registervalue.username + "\n password - " + registervalue.password + "\n role - " + registervalue.role)
-    const json = JSON.stringify(registervalue);
     axios.post(`http://localhost:8000/api/v1/auth/register`, registervalue).then(function (response) {
       console.log(response);
+      toast.success('Registration Successful',{autoClose:2000})
     }).catch(function (error) {
       console.log(error);
+      toast.error(error.message,{autoClose:2000})
     });
-
-    localStorage.setItem("registerData", json);
     navigate('/')
   }
 

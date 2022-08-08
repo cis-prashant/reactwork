@@ -25,10 +25,9 @@ const View = ({ elements }) => {
   }
   const EditId = elements.isbn;
   const [editUser, setEditUser] = useState({
-    title: elements.title,
-    isbn: elements.isbn,
-    status: elements.status,
-    pageCount: elements.pageCount,
+    id: elements._id,
+    name: elements.name,
+    author: elements.author,
   });
   return (
     <>
@@ -48,18 +47,16 @@ const View = ({ elements }) => {
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Title</th>
-              <th scope="col">ISBN</th>
-              <th scope="col">Status</th>
-              <th scope="col">Page Count</th>
+              <th scope="col">Id</th>
+              <th scope="col">Name</th>
+              <th scope="col">Author</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>{elements.title}</td>
-              <td>{elements.isbn}</td>
-              <td>{elements.status}</td>
-              <td>{elements.pageCount}</td>
+              <td>{elements._id}</td>
+              <td>{elements.name}</td>
+              <td>{elements.author}</td>
             </tr>
           </tbody>
         </table>

@@ -7,6 +7,7 @@ import { setloadUsers } from "../Redux/Action/Action";
 import { toast } from "react-toastify";
 
 const Home = () => {
+  let token = localStorage.getItem("token");
   const products = useSelector((state) => state.callReducer.firstState);
   const dispatch = useDispatch();
   const jsonData = JSON.stringify(products);
@@ -16,20 +17,35 @@ const Home = () => {
 
   async function loadUsers() {
     try {
-      const result = await axios.get("http://localhost:8000/users");
+      const result = await axios.get("http://localhost:8000/api/v1/bookAll", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       dispatch(setloadUsers(result.data));
     } catch (error) {
-      console.log("error =>", error.result);
+      console.log("error =>", error);
     }
   }
 
   const deleteUserData = async (id) => {
+    console.log(id, token);
     if (window.confirm("Do You want to delete!")) {
-      await axios.delete(`http://localhost:8000/users/${id}`).then(res => {
-        toast.success('Deleted Successfully',{autoClose:2000})
-      }).catch(e=> {
-        toast.error('Error',{autoClose:2000})
-      })
+      await axios
+        .delete(
+          `http://localhost:8000/api/v1/books/delete/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          toast.success("Deleted Successfully", { autoClose: 2000 });
+        })
+        .catch((e) => {
+          toast.error(e.message, { autoClose: 2000 });
+        });
       loadUsers();
     }
   };
@@ -42,24 +58,22 @@ const Home = () => {
           <thead className=" table-dark">
             <tr>
               <th scope="col">Sno</th>
-              <th scope="col">Title</th>
-              <th scope="col">ISBN</th>
-              <th scope="col">Status</th>
-              <th scope="col">Page Count</th>
+              <th scope="col">Id</th>
+              <th scope="col">Name</th>
+              <th scope="col">Author</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody>
-            {products &&
-              products.map((element, index) => {
+            {products.resData &&
+              products.resData.map((element, index) => {
                 return (
                   <>
                     <tr>
                       <th scope="row">{index + 1}</th>
-                      <td>{element.title}</td>
-                      <td>{element.isbn}</td>
-                      <td>{element.status}</td>
-                      <td>{element.pageCount}</td>
+                      <td>{element._id}</td>
+                      <td>{element.name}</td>
+                      <td>{element.author}</td>
                       <td>
                         <View elements={element} />
 
@@ -70,7 +84,7 @@ const Home = () => {
                         <a
                           className="btn btn-danger m-2"
                           onClick={() => {
-                            deleteUserData(element.id);
+                            deleteUserData(element._id);
                           }}
                         >
                           <i class="far fa-trash-alt"></i> Delete

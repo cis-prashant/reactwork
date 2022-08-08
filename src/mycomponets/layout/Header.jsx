@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Header = ({ setlogout }) => {
   let navigate = useNavigate();
   function logout() {
-    localStorage.removeItem("data")
+    localStorage.removeItem("token")
     setlogout(null);
     navigate('/')
   }

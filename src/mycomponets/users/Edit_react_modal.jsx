@@ -29,13 +29,10 @@ const Edit_react_modal = ({ elements, loadUsers }) => {
   useEffect(()=>{
 
   },[])
-  const EditId = elements.id;
+  const EditId = elements._id;
   const [editUser, setEditUser] = useState({
-    title: elements.title,
-    id : elements.id,
-    isbn: elements.isbn,
-    status: elements.status,
-    pageCount: elements.pageCount,
+    name: elements.name,
+    author: elements.author,
   });
   const handleChange = (e) => {
     console.log(e.target.value);
@@ -89,14 +86,14 @@ const Edit_react_modal = ({ elements, loadUsers }) => {
         <form className="row g-3 needs-validation" novalidate>
           <div className="col-md-12">
             <label for="validationCustom01" className="form-label">
-              Title
+              Name
             </label>
             <input
               type="text"
               className="form-control"
               id="validationCustom01"
-              name="title"
-              value={editUser.title}
+              name="name"
+              value={editUser.name}
               onChange={(e) => {
                 handleChange(e);
               }}
@@ -106,14 +103,14 @@ const Edit_react_modal = ({ elements, loadUsers }) => {
           </div>
           <div className="col-md-12">
             <label for="validationCustom02" className="form-label">
-              ISBN
+              Author
             </label>
             <input
               type="text"
               className="form-control"
               id="validationCustom02"
-              name="isbn"
-              value={editUser.isbn}
+              name="author"
+              value={editUser.author}
               onChange={(e) => {
                 handleChange(e);
               }}
@@ -121,47 +118,6 @@ const Edit_react_modal = ({ elements, loadUsers }) => {
             />
             <div className="valid-feedback">Looks good!</div>
           </div>
-          <div className="col-md-12">
-            <label for="validationCustomUsername" className="form-label">
-              Status
-            </label>
-            <div className="input-group has-validation">
-              <input
-                type="text"
-                className="form-control"
-                id="validationCustomUsername"
-                aria-describedby="inputGroupPrepend"
-                name="status"
-                value={editUser.status}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-                required
-              />
-              <div className="invalid-feedback">Please enter a status.</div>
-            </div>
-          </div>
-          <div className="col-md-12">
-            <label for="validationCustomUsername" className="form-label">
-              Page Count
-            </label>
-            <div className="input-group has-validation">
-              <input
-                type="text"
-                className="form-control"
-                id="validationCustomUsername"
-                aria-describedby="inputGroupPrepend"
-                name="pageCount"
-                value={editUser.pageCount}
-                onChange={(e) => {
-                  handleChange(e);
-                }}
-                required
-              />
-              <div className="invalid-feedback">Please enter page Count.</div>
-            </div>
-          </div>
-
           <div className="col-12  text-center">
             <button
               type="button"

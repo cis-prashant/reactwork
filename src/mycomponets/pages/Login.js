@@ -8,7 +8,7 @@ import "../pages/login.css";
 import RegistrationForm from "./RegistrationForm";
 import axios from "axios";
 
-const Login = () => {
+const Login = (props) => {
   let navigate = useNavigate();
   const [focused, setFocused] = useState(false);
   const handleFocus = (e) => {
@@ -23,31 +23,17 @@ const Login = () => {
     const { name, value } = e.target;
     setLogin({ ...login, [name]: value });
   };
-  const submitLoign = () => {
-    console.log(login);
-    localStorage.setItem("data", JSON.stringify(login));
-    axios.post(`http://localhost:8000/api/v1/auth/login`, JSON.stringify(login)).then(res => {
+  const submitLoign = (e) => {
+    e.preventDefault();
+    axios.post(`http://localhost:8000/api/v1/auth/login`,login).then(res => {
       console.log(res);
+      localStorage.setItem('token',res.data.token)
+      props.setlogout(res.data.token)
+      toast.success('Login Success',{autoClose:2000})
     }).catch(e => {
       console.log(e);
+      toast.error(e.message,{autoClose:2000})
     })
-    // if(jsonres){
-    //   if(jsonres.email == login.email && jsonres.password == login.password){
-    //     if(jsonres.role == 'CREATOR'){
-    //       login.role = jsonres.role
-    //       const json = JSON.stringify(login);
-    //       localStorage.setItem("data", json);
-    //     }else if(jsonres.role == 'VIEWER'){
-    //       login.role = jsonres.role
-    //       const json = JSON.stringify(login);
-    //       localStorage.setItem("data", json);
-    //     }
-    //   }else{
-    //     alert('error')
-    //   }
-    // }else{
-    //   alert('sign up to continue')
-    // }
   };
   return (
     <>

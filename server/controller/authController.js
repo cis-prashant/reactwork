@@ -4,11 +4,10 @@ const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const db = require('../connection');
 const usersSchema = new mongoose.Schema({ username: String, email: String, role: String, password: String });
-const Users = db.model('users', usersSchema);
+const Users = require('../models/users');
 require('dotenv').config();
 
 exports.register = async function (req, res) {
-    console.log(req.body);
     await check('username', "Name is required").notEmpty().run(req);
     await check('password', "Password is required").notEmpty().run(req);
     await check('email', 'Invalid email').isEmail().notEmpty().run(req);
@@ -47,12 +46,14 @@ exports.login = async function (req, res) {
     let password = req.body.password;
 
     let user = await Users.findOne({ email: email });
-    console.log(user)
+    console.log("useruseruseruser",user)
     if (user && password == null || false == bcrypt.compareSync(password, user.password)) {
-        return res.status(200).json({ success: 'fail', errors: "The password that you have entered is incorrect!", incorrectPwd: true });
+        return res.status(400).json({ success: false, errors: "The password that you have entered is incorrect!", incorrectPwd: true });
+    }else if(user==null){
+        return res.status(400).json({ success: false, errors: "Email is not exists!"});
     }
 
-    let payload = { id: user._id, email: user.email };
+    let payload = { id: user._id, email: user.email, role: user.role };
     let options = { expiresIn: process.env.JWT_EXPIRES, algorithm: 'HS256', issuer: process.env.JWT_ISSUER };
     let secret = process.env.JWT_SECRET;
 
@@ -61,7 +62,7 @@ exports.login = async function (req, res) {
 
     if (user) return res.status(200).json({ "success": true, _user, token: token });
 
-    return res.status(200).json({ "success": false });
+    return res.status(400).json({ "success": false });
 };
 
 function generatePassword(pwd) {
