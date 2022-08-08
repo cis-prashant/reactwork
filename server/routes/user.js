@@ -1,8 +1,8 @@
-const userController = require('../controller/userController');
+const authController = require('../controller/authController');
 
 module.exports = (router) => {
     router.route('/auth/register')
-        .post([authController.validate('register')],authController.register);
-    router.route('/auth/sociallogin')
-        .post(authController.socialLogin);
+        .post(authController.register);
+    router.route('/auth/login')
+        .post(authController.login);
 };
