@@ -17,15 +17,13 @@ module.exports = {
     const authorizationHeader = req.headers.authorization;
     let result;
     if (authorizationHeader) {
-         const token = req.headers.authorization.split(' ')[1]; // Bearer <token>
+         const token = req.headers.authorization.split(' ')[1]; 
           
           const options = {
               expiresIn: process.env.JWT_EXPIRES, algorithm: 'HS256'
           }; 
           try {
-              // verify makes sure that the token hasn't expired and has been issued by us
               result = jwt.verify(token, process.env.JWT_SECRET, options);
-              // Let's pass back the decoded token to the request object
               next();
           } catch (err) {
               result = { 
@@ -34,8 +32,6 @@ module.exports = {
               };
               console.log(result);
               res.status(401).send(result);
-              // Throw an error just in case anything goes wrong with verification
-              //throw new Error(err);
           }
       } else {
         result = { 
@@ -53,13 +49,12 @@ module.exports = {
 
         logger.log({
           level: 'info',
-          message: 'Hello distributed log files!ddddddd'
+          message: req.route.path + ' : ' + Date()
         });
         next();
     },
 
     checkPermission: (req, res, next) => {       
-        if(req.route.path == '/books' && req.route.methods.post) {
             let token = req.headers.authorization.split(' ')[1];
             let result;
             let options = {
@@ -75,6 +70,5 @@ module.exports = {
                 };
                 res.status(401).send(resp);
             }
-        }
     }
 };

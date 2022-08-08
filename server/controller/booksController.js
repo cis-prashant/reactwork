@@ -1,8 +1,14 @@
 const Books = require('../models/books');
-
+const { check, validationResult } = require('express-validator');
 
 exports.books = async function(req,res){
-    console.log(req.body);
+    await check('name', "Book name is required!").notEmpty().run(req);
+    await check('author', 'Author name is required!').notEmpty().run(req);
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send({ errors: errors.array(), message: 'Could not create book!' });
+    }
+
     await Books.create({ name: req.body.name, author : req.body.author });
     return res.status(200).json({ "res" :"ok"});
 }

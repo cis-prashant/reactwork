@@ -1,8 +1,9 @@
 const authController = require('../controller/authController');
+const logger = require('../utils').logger;
 
 module.exports = (router) => {
     router.route('/auth/register')
-        .post(authController.register);
+        .post([logger], authController.register);
     router.route('/auth/login')
-        .post(authController.login);
+        .post([logger], authController.login);
 };
