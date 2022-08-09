@@ -14,4 +14,6 @@ module.exports = (router) => {
         .get([validateToken], booksController.findBooks);
     router.route('/books/delete/:id')
         .delete([logger, validateToken, checkPermission],booksController.deleteBook);
+    router.route('/books')
+        .get([logger, validateToken], booksController.getBooks);
 };
