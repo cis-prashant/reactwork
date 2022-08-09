@@ -14,7 +14,7 @@ const customStyles = {
   },
 };
 Modal.setAppElement("#root");
-
+let token = localStorage.getItem("token");
 const Edit_react_modal = ({ elements, loadUsers }) => {
   let navigate = useNavigate();
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -26,11 +26,10 @@ const Edit_react_modal = ({ elements, loadUsers }) => {
   function closeModal() {
     setIsOpen(false);
   }
-  useEffect(()=>{
-
-  },[])
+  useEffect(() => {}, []);
   const EditId = elements._id;
   const [editUser, setEditUser] = useState({
+    id: elements._id,
     name: elements.name,
     author: elements.author,
   });
@@ -40,32 +39,39 @@ const Edit_react_modal = ({ elements, loadUsers }) => {
     setEditUser({ ...editUser, [name]: value });
   };
   const EditApiCall = async (EditId, loadUsers) => {
-    await axios.put(`http://localhost:8000/users/${EditId}`, editUser).then((res)=> {
-      console.log(res);
-      toast.success("Data updated successfully!", {
-        position: "bottom-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+    await axios
+      .post(`http://localhost:8000/api/v1/books/update`, editUser, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        toast.success("Data updated successfully!", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        navigate("/");
+        setEditUser(editUser);
+        loadUsers();
+      })
+      .catch((e) => {
+        console.log(e);
+        toast.error(e.message, {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       });
-      navigate("/");
-      setEditUser(editUser);
-      loadUsers();
-    }).catch((e)=> {
-      console.log(e);
-      toast.error(e.message, {
-        position: "bottom-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    })
   };
 
   return (

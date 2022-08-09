@@ -26,7 +26,7 @@ const Login = (props) => {
   const submitLoign = (e) => {
     e.preventDefault();
     axios.post(`http://localhost:8000/api/v1/auth/login`,login).then(res => {
-      console.log(res);
+      console.log(res.data._user.user.role);
       localStorage.setItem('token',res.data.token)
       props.setlogout(res.data.token)
       toast.success('Login Success',{autoClose:2000})

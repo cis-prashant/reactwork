@@ -24,6 +24,7 @@ module.exports = {
           }; 
           try {
               result = jwt.verify(token, process.env.JWT_SECRET, options);
+              res.locals.user = result;    
               next();
           } catch (err) {
               result = { 

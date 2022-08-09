@@ -11,13 +11,14 @@ const Home = () => {
   const products = useSelector((state) => state.callReducer.firstState);
   const dispatch = useDispatch();
   const jsonData = JSON.stringify(products);
+  let userData = products.userData;
   useEffect(() => {
     loadUsers();
   }, [jsonData, setloadUsers]);
 
   async function loadUsers() {
     try {
-      const result = await axios.get("http://localhost:8000/api/v1/bookAll", {
+      const result = await axios.get("http://localhost:8000/api/v1/books", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -32,14 +33,11 @@ const Home = () => {
     console.log(id, token);
     if (window.confirm("Do You want to delete!")) {
       await axios
-        .delete(
-          `http://localhost:8000/api/v1/books/delete/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
+        .delete(`http://localhost:8000/api/v1/books/delete/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
         .then((res) => {
           toast.success("Deleted Successfully", { autoClose: 2000 });
         })
@@ -75,20 +73,26 @@ const Home = () => {
                       <td>{element.name}</td>
                       <td>{element.author}</td>
                       <td>
-                        <View elements={element} />
-
-                        <Edit_react_modal
-                          elements={element}
-                          loadUsers={loadUsers}
-                        />
-                        <a
-                          className="btn btn-danger m-2"
-                          onClick={() => {
-                            deleteUserData(element._id);
-                          }}
-                        >
-                          <i class="far fa-trash-alt"></i> Delete
-                        </a>
+                        {userData.role[0] === "CREATOR" ? (
+                          <>
+                            {" "}
+                            <View elements={element} />
+                            <Edit_react_modal
+                              elements={element}
+                              loadUsers={loadUsers}
+                            />
+                            <a
+                              className="btn btn-danger m-2"
+                              onClick={() => {
+                                deleteUserData(element._id);
+                              }}
+                            >
+                              <i class="far fa-trash-alt"></i> Delete
+                            </a>
+                          </>
+                        ) : (
+                          <View elements={element} />
+                        )}
                       </td>
                     </tr>
                   </>
