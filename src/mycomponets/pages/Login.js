@@ -31,7 +31,6 @@ const Login = (props) => {
       props.setlogout(res.data.token)
       toast.success('Login Success',{autoClose:2000})
     }).catch(e => {
-      console.log(e);
       toast.error(e.message,{autoClose:2000})
     })
   };
@@ -86,14 +85,13 @@ const Login = (props) => {
                         Password
                       </label>
                       <input
-                        type="text"
+                        type="password"
                         className="form-control"
                         id="validationDefault02"
                         placeholder="*********"
                         onChange={handleChangeLogin}
                         value={login.password}
                         name="password"
-                        // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
                         onBlur={handleFocus}
                         focused={focused.toString()}
                         required

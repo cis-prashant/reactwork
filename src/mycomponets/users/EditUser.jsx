@@ -25,7 +25,6 @@ const EditUser = ({ elements }) => {
         data-bs-toggle="modal"
         data-bs-target="#EditModal"
         onClick={() => {
-          console.log(elements);
         }}
       >
         Edit

@@ -31,7 +31,6 @@ module.exports = {
                   error: 'Authentication error. In-valid Token.',
                   status: 401
               };
-              console.log(result);
               res.status(401).send(result);
           }
       } else {

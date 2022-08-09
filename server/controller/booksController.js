@@ -19,27 +19,18 @@ exports.findBooks = async function (req, res) {
     let _new = req.query.new;
     let resData
     let user = res.locals.user
-    if (!old && !_new) {
-        //when user role = VIEW_ALL
-        if (user.role[0] === 'VIEW_ALL') {
-            resData = await Books.find();
-            return res.status(200).json({ resData: resData, userData: user });
-        } else {
-            //for other Roles
-            resData = await Books.find({ user_id: user.id });
-            return res.status(200).json({ resData: resData, userData: user });
-        }
-    } else {
-        //for old book data
-        if (old != undefined) {
-            resData = await Books.find({ createdAt: { $lte: new Date().getTime() - (1000 * 60 * 10) } });
-            return res.status(200).json({ "res": "ok", resData: resData, userData: user });
-        } else if (_new != undefined) {
-        //for new book data
-            resData = await Books.find({ createdAt: { $gte: new Date().getTime() - (1000 * 60 * 10) } });
-            return res.status(200).json({ "res": "ok", resData: resData, userData: user });
-        }
+    let query = {}
+    if (old != undefined) {
+        query.createdAt = { $lte: new Date().getTime() - (1000 * 60 * 10) };
+    } else if (_new != undefined) {
+        query.createdAt = { $gte: new Date().getTime() - (1000 * 60 * 10) };
     }
+
+    if (!user.role.includes('VIEW_ALL')) {
+        query.user_id = user.id;
+    }
+    resData = await Books.find(query);
+    return res.status(200).json({ "res": "ok", resData: resData, userData: user });
 }
 
 exports.deleteBook = async function (req, res) {

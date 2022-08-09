@@ -31,7 +31,6 @@ const RegistrationForm = () => {
     axios.post(`http://localhost:8000/api/v1/auth/register`, registervalue).then(function (response) {
       toast.success('Registration Successful',{autoClose:2000})
     }).catch(function (error) {
-      console.log(error);
       toast.error(error.message,{autoClose:2000})
     });
     navigate('/')
@@ -85,7 +84,7 @@ const RegistrationForm = () => {
                 <input
                   name="password"
                   value={registervalue.password}
-                  type="text"
+                  type="password"
                   class="form-control"
                   id="validationDefault03"
                   required

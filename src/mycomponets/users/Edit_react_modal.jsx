@@ -59,7 +59,6 @@ const Edit_react_modal = ({ elements, loadUsers }) => {
         loadUsers();
       })
       .catch((e) => {
-        console.log(e);
         toast.error(e.message, {
           position: "bottom-right",
           autoClose: 2000,
