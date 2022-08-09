@@ -17,7 +17,6 @@ import RegistrationForm from "./mycomponets/pages/RegistrationForm";
 
 function App() {  
   const localData = localStorage.getItem("token");
-  console.log("token",localData)
   const [logout, setlogout] = useState(localData);
   return (
     <>
@@ -31,9 +30,9 @@ function App() {
       ) : (
         <>
           {/* <funFunction.provider> */}
-          <Header setlogout={setlogout} />
+          <Header setlogout={setlogout}/>
           <Routes>
-            <Route path="/" exact element={<Home />} />
+            <Route path="/" exact element={<Home/>} />
             <Route path="/about" exact element={<About />} />
             <Route path="/contact" exact element={<Contact />} />
             <Route path="*" element={<NoteFound />} />

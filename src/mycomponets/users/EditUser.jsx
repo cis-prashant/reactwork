@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const EditUser = ({ elements }) => {
-  console.log("ele data", elements);
   const EditId = elements.isbn;
   const [editUser, setEditUser] = useState({
     title: elements.title,

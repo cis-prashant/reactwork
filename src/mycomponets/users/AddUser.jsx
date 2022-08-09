@@ -42,7 +42,7 @@ const AddUser = () => {
         draggable: true,
         progress: undefined,
       });
-      const result = await axios.get("http://localhost:8000/api/v1/bookAll", {
+      const result = await axios.get("http://localhost:8000/api/v1/books", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -62,7 +62,7 @@ module.exports = {
                   expiresIn: process.env.JWT_EXPIRES, algorithm: 'HS256'
             }; 
             result = jwt.verify(token, process.env.JWT_SECRET, options);
-            if(result.role.includes('CREATOR')) {
+            if(result.role.includes('CREATOR') || result.role.includes('VIEWER')) {
                 next();
             } else {
                 let resp = { 

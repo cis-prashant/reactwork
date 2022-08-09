@@ -11,10 +11,12 @@ const Home = () => {
   const products = useSelector((state) => state.callReducer.firstState);
   const dispatch = useDispatch();
   const jsonData = JSON.stringify(products);
+  const [registervalue, setRegister] = useState();
   let userData = products.userData;
+  let stringData = userData ? JSON.stringify(userData.role[0]) : ''
   useEffect(() => {
     loadUsers();
-  }, [jsonData, setloadUsers]);
+  }, []);
 
   async function loadUsers() {
     try {
@@ -29,8 +31,21 @@ const Home = () => {
     }
   }
 
+  const handleChange = async (e) => {
+    const { name, value } = e.target;
+    setRegister(e.target.value);
+    const result = await axios.get(
+      `http://localhost:8000/api/v1/books?${value}=1`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    dispatch(setloadUsers(result.data));
+  };
+
   const deleteUserData = async (id) => {
-    console.log(id, token);
     if (window.confirm("Do You want to delete!")) {
       await axios
         .delete(`http://localhost:8000/api/v1/books/delete/${id}`, {
@@ -51,7 +66,25 @@ const Home = () => {
   return (
     <>
       <div className=" container">
-        <h1>Home</h1>
+        <h1>{stringData ? JSON.parse(stringData) : ''}</h1>
+        <div class="col-md-3">
+          <select
+            class="form-select"
+            id="validationDefault04"
+            style={{ margin: "0px 835px 10px" }}
+            required
+            onChange={handleChange}
+            name="book"
+            value={registervalue}
+          >
+            <option selected disabled value="">
+              Choose Time Interval
+            </option>
+            <option>All</option>
+            <option>old</option>
+            <option>new</option>
+          </select>
+        </div>
         <table class="table table-hover shadow border  text-center ">
           <thead className=" table-dark">
             <tr>
@@ -67,34 +100,40 @@ const Home = () => {
               products.resData.map((element, index) => {
                 return (
                   <>
-                    <tr>
-                      <th scope="row">{index + 1}</th>
-                      <td>{element._id}</td>
-                      <td>{element.name}</td>
-                      <td>{element.author}</td>
-                      <td>
-                        {userData.role[0] === "CREATOR" ? (
-                          <>
-                            {" "}
+                    {products.resData ? (
+                      <tr>
+                        <th scope="row">{index + 1}</th>
+                        <td>{element._id}</td>
+                        <td>{element.name}</td>
+                        <td>{element.author}</td>
+                        <td>
+                          {userData.role[0] === "CREATOR" ? (
+                            <>
+                              {" "}
+                              <View elements={element} />
+                              <Edit_react_modal
+                                elements={element}
+                                loadUsers={loadUsers}
+                              />
+                              <a
+                                className="btn btn-danger m-2"
+                                onClick={() => {
+                                  deleteUserData(element._id);
+                                }}
+                              >
+                                <i class="far fa-trash-alt"></i> Delete
+                              </a>
+                            </>
+                          ) : (
                             <View elements={element} />
-                            <Edit_react_modal
-                              elements={element}
-                              loadUsers={loadUsers}
-                            />
-                            <a
-                              className="btn btn-danger m-2"
-                              onClick={() => {
-                                deleteUserData(element._id);
-                              }}
-                            >
-                              <i class="far fa-trash-alt"></i> Delete
-                            </a>
-                          </>
-                        ) : (
-                          <View elements={element} />
-                        )}
-                      </td>
-                    </tr>
+                          )}
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <td colspan="2">There's no data</td>
+                      </tr>
+                    )}
                   </>
                 );
               })}

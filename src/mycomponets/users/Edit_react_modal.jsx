@@ -34,7 +34,6 @@ const Edit_react_modal = ({ elements, loadUsers }) => {
     author: elements.author,
   });
   const handleChange = (e) => {
-    console.log(e.target.value);
     const { name, value } = e.target;
     setEditUser({ ...editUser, [name]: value });
   };
@@ -46,7 +45,6 @@ const Edit_react_modal = ({ elements, loadUsers }) => {
         },
       })
       .then((res) => {
-        console.log(res);
         toast.success("Data updated successfully!", {
           position: "bottom-right",
           autoClose: 2000,

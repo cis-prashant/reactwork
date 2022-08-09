@@ -33,7 +33,6 @@ exports.register = async function (req, res) {
 };
 
 exports.login = async function (req, res) {
-    console.log(req.body);
     await check('password', "Password is required").notEmpty().run(req);
     await check('email', 'Invalid email').isEmail().notEmpty().run(req);
 
@@ -46,7 +45,6 @@ exports.login = async function (req, res) {
     let password = req.body.password;
 
     let user = await Users.findOne({ email: email });
-    console.log("useruseruseruser",user)
     if (user && password == null || false == bcrypt.compareSync(password, user.password)) {
         return res.status(400).json({ success: false, errors: "The password that you have entered is incorrect!", incorrectPwd: true });
     }else if(user==null){

@@ -29,7 +29,6 @@ const RegistrationForm = () => {
       return
     }
     axios.post(`http://localhost:8000/api/v1/auth/register`, registervalue).then(function (response) {
-      console.log(response);
       toast.success('Registration Successful',{autoClose:2000})
     }).catch(function (error) {
       console.log(error);

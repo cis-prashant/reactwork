@@ -8,12 +8,8 @@ module.exports = (router) => {
         .post([logger, validateToken, checkPermission], booksController.books);
     router.route('/books/update')
         .post([logger, validateToken, checkPermission], booksController.updateBook);
-    router.route('/bookById')
-        .get([validateToken], booksController.findBook);
     router.route('/books')
         .get([validateToken], booksController.findBooks);
     router.route('/books/delete/:id')
         .delete([logger, validateToken, checkPermission],booksController.deleteBook);
-    router.route('/books')
-        .get([logger, validateToken], booksController.getBooks);
 };

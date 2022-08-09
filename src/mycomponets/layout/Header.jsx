@@ -2,13 +2,17 @@ import React, { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import AddUser from "../users/AddUser";
 import { useNavigate } from "react-router-dom";
+import { setloadUsers } from "../Redux/Action/Action";
 
-const Header = ({ setlogout }) => {
+const Header = (props) => {
+  let userData = localStorage.getItem("userData");
+  let data = JSON.parse(userData);
   let navigate = useNavigate();
   function logout() {
-    localStorage.removeItem("token")
-    setlogout(null);
-    navigate('/')
+    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
+    props.setlogout(null);
+    navigate("/");
   }
   return (
     <>
@@ -32,36 +36,16 @@ const Header = ({ setlogout }) => {
             className="collapse navbar-collapse "
             id="navbarSupportedContent"
           >
-            <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-              {/* <li className="nav-item">
-                <NavLink className="nav-link " aria-current="page" to="/">
-                  Home
-                </NavLink>
-              </li> */}
-              {/* <li className="nav-item">
-                <NavLink className="nav-link" to="/about">
-                  About
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/contact">
-                  Contact
-                </NavLink>
-              </li> */}
-            </ul>
-            <div className=" ">
-              <AddUser />
-            </div>
-            <div
-              style={
-                {
-                  // color: "white",
-                  // // padding: " 15px 50px 5px 50px",
-                  // float: "right",
-                  // fontsize: "16px",
-                }
-              }
-            >
+            <ul className="navbar-nav mx-auto mb-2 mb-lg-0"></ul>
+            {data.user.role[0] === "VIEW_ALL" ? (
+              ""
+            ) : (
+              <div className=" ">
+                <AddUser />
+              </div>
+            )}
+
+            <div>
               <button
                 onClick={logout}
                 class="btn btn-danger square-btn-adjust m-2"
