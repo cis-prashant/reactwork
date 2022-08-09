@@ -54,3 +54,16 @@ exports.updateBook = async function(req, res) {
         return res.status(422).json({ "res" :"Book not found!"});
     }
 }
+
+exports.getBooks = async function(req, res) {
+    let old = req.query.old;
+    let _new = req.query.new;
+    let books;
+    if(old != undefined) {
+        books = await Books.find({createdAt : {$lte: new Date().getTime()-(1000*60*10)}});
+    } else if(_new != undefined) {
+        books = await Books.find({createdAt : {$gte: new Date().getTime()-(1000*60*10)}});
+    }
+
+    return res.status(200).json({ "res" :"ok", books});
+}
